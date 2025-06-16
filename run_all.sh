@@ -12,7 +12,7 @@ do
   echo "Running isothermal profile for N=$N"
   ./fv2d profile_isothermal_$N.ini > log_isothermal_$N.out && mkdir hse/isothermal_$N && mv run.* hse/isothermal_$N/ && mv profile_isothermal_$N* hse/isothermal_$N/
   echo "Running isentropic profile for N=$N"
-  ./fv2d profile_isentropic_$N.ini > log_isentropic_$N.out && mkdir hse/isentropic_$N && mv run.* hse/isentropic_$N/ && mv profile_isentropic_$N* hse/isentropic_$N/
+  ./fv2d profile_isentropic_$N.ini > log_isentropic_$N.out && mkdir hse/isentropic_$N && mv run_*h5 run_*xmf hse/isentropic_$N/ && mv profile_isentropic_$N* hse/isentropic_$N/
 done
 
 echo "\n\n==== Running post processing ===="

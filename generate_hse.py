@@ -54,7 +54,7 @@ p   = np.ones_like(y)
 # Recovering the pressure
 '''
 if mode == 'isentropic':
-    rho = np.pow(rho0**(gamma0-1.0) + g / (np.exp(S/cv)) * (gamma0-1.0)/gamma0 * y, 1.0 / (gamma0-1.0))
+    rho = np.power(rho0**(gamma0-1.0) + g / (np.exp(S/cv)) * (gamma0-1.0)/gamma0 * y, 1.0 / (gamma0-1.0))
     p = np.exp(S/cv)*rho**gamma0
 else:
     H0 = R*T/g
