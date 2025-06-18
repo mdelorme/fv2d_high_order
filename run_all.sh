@@ -3,8 +3,10 @@
 rm -rf hse
 mkdir hse
 
+echo "==== Generating profiles and initial conditions ===="
 ./generate_all.sh
 
+echo "\n\n==== Running FV2D ===="
 for N in 32 64 128 256 512 1024 2048;
 do
   echo "Running isothermal profile for N=$N"
@@ -13,5 +15,5 @@ do
   ./fv2d profile_isentropic_$N.ini > log_isentropic_$N.out && mkdir hse/isentropic_$N && mv run.* hse/isentropic_$N/ && mv profile_isentropic_$N* hse/isentropic_$N/
 done
 
-echo "Running post processes"
+echo "\n\n==== Running post processing ===="
 python3 extract_comparison.py

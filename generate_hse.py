@@ -28,7 +28,7 @@ if mode not in ('isothermal', 'isentropic'):
 ## Base parameters
 L = 2       ## Size of the box
 dy = L/N    ## Spatial step 
-g  = -1.0     ## Gravity
+g  = -1.0   ## Gravity
 Ng = 2      ## Number fo ghosts on each side of the domain
 Nt = N+2*Ng ## Total number of points in the domain
 
@@ -52,6 +52,7 @@ rho = np.ones_like(y)
 p   = np.ones_like(y)
 
 # Recovering the pressure
+'''
 if mode == 'isentropic':
     rho = np.pow(rho0**(gamma0-1.0) + g / (np.exp(S/cv)) * (gamma0-1.0)/gamma0 * y, 1.0 / (gamma0-1.0))
     p = np.exp(S/cv)*rho**gamma0
@@ -59,6 +60,32 @@ else:
     H0 = R*T/g
     rho = rho0 * np.exp(y/H0)
     p   = p0   * np.exp(y/H0)
+'''
+def hse_isentropic(i, rho_vec):
+    p = lambda rho: np.exp(S/cv) * rho**gamma0
+    rho0 = rho_vec[i-1]
+    p0   = p(rho0)
+
+    hse = lambda rho: (p0-p(rho)) / dy + 0.5 * (rho+rho0) * g
+    rho_vec[i] = newton(hse, rho0, tol=1e-15)
+
+def hse_isothermal(i, rho_vec):
+    p = lambda rho: R * rho * T
+    rho0 = rho_vec[i-1]
+    p0   = p(rho0)
+
+    hse = lambda rho: (p0-p(rho)) / dy + 0.5 * (rho+rho0) * g
+    rho_vec[i] = newton(hse, rho0, tol=1e-15)
+
+rho = np.ones_like(y) * rho0
+if mode == 'isentropic':
+    for i in tqdm(range(Ng-1, Nt)):
+        hse_isentropic(i, rho)
+    p = np.exp(S/cv) * rho**gamma0
+else:
+    for i in tqdm(range(Ng-1, Nt)):
+        hse_isothermal(i, rho)
+    p = R * rho * T
 
 fig, ax = plt.subplots(2, 1, figsize=(8, 10))
 ax_left = ax[0]

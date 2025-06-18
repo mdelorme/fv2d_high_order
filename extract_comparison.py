@@ -16,6 +16,7 @@ for N in tqdm(resolutions):
 
   diff = init_pressure - final_pressure
   isentropic_L1 = np.linalg.norm(diff, ord=1.0)
+  isentropic_max_v = np.max(np.abs(f_isentropic[f'ite_{Nite-1:04}/v']))
 
   path_isothermal = f'hse/isothermal_{N}/run.h5'
   f_isothermal = h5py.File(path_isothermal, 'r')
@@ -25,7 +26,8 @@ for N in tqdm(resolutions):
 
   diff = init_pressure - final_pressure
   isothermal_L1 = np.linalg.norm(diff, ord=1.0)
+  isothermal_max_v = np.max(np.abs(f_isothermal[f'ite_{Nite-1:04}/v']))
 
-  results.append((N, isentropic_L1, isothermal_L1))
+  results.append((N, isentropic_L1, isothermal_L1, isentropic_max_v, isothermal_max_v))
 
 np.savetxt('hse.dat', np.array(results))
