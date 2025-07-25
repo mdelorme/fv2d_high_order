@@ -141,7 +141,7 @@ f_in = open('template.ini', 'r')
 template = ''.join(f_in.readlines())
 f_in.close()
 
-Nx = N//4
+Nx = 4 #N//4
 template = template.format(Nx, N, L, 2.0*tau, profile_filename, g)
 
 f_out = open(prefix+'.ini', 'w')
