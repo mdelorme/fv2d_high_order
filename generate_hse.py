@@ -27,7 +27,7 @@ if mode not in ('isothermal', 'isentropic'):
 
 ## Base parameters
 L = 2       ## Size of the box
-dy = L/N    ## Spatial step 
+dy = L/N    ## Spatial step
 g  = -1.0   ## Gravity
 Ng = 2      ## Number fo ghosts on each side of the domain
 Nt = N+2*Ng ## Total number of points in the domain
@@ -142,7 +142,8 @@ template = ''.join(f_in.readlines())
 f_in.close()
 
 Nx = 4 #N//4
-template = template.format(Nx, N, L, 2.0*tau, profile_filename, g)
+xmax = Nx*dy
+template = template.format(Nx, N, xmax, L, 2.0*tau, profile_filename, g)
 
 f_out = open(prefix+'.ini', 'w')
 f_out.write(template)
