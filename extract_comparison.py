@@ -8,7 +8,8 @@ results = []
 for N in tqdm(resolutions):
   Nx = 4 #N//4
   dy = 2.0 / N
-  
+  dV = dy * dy
+
   path_isentropic = f'hse/isentropic_{N}/run.h5'
   f_isentropic = h5py.File(path_isentropic, 'r')
   Nite = len(f_isentropic.keys())-2
@@ -16,7 +17,7 @@ for N in tqdm(resolutions):
   final_pressure = np.array(f_isentropic[f'ite_{Nite-1:04}/prs'])[:, Nx//2]
 
   diff = init_pressure - final_pressure
-  isentropic_L1 = np.sum(np.abs(diff)) * dy
+  isentropic_L1 = np.sum(np.abs(diff)) * dV
   isentropic_max_v = np.max(np.abs(f_isentropic[f'ite_{Nite-1:04}/v']))
 
   path_isothermal = f'hse/isothermal_{N}/run.h5'
@@ -26,7 +27,7 @@ for N in tqdm(resolutions):
   final_pressure = np.array(f_isothermal[f'ite_{Nite-1:04}/prs'])[:, Nx//2]
 
   diff = init_pressure - final_pressure
-  isothermal_L1 = np.sum(np.abs(diff)) * dy
+  isothermal_L1 = np.sum(np.abs(diff)) * dV
   isothermal_max_v = np.max(np.abs(f_isothermal[f'ite_{Nite-1:04}/v']))
 
   results.append((N, isentropic_L1, isothermal_L1, isentropic_max_v, isothermal_max_v))
